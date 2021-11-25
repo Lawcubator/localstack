@@ -8,6 +8,7 @@ from collections import namedtuple
 from typing import Callable, Optional
 from unittest.mock import patch
 
+import pytest
 import xmltodict
 from botocore.exceptions import ClientError
 from jsonpatch import apply_patch
@@ -1305,6 +1306,7 @@ class TestAPIGateway(unittest.TestCase):
         lambda_client.delete_function(FunctionName=fn_name)
         client.delete_rest_api(restApiId=rest_api["id"])
 
+    @pytest.mark.failing_offline
     def test_api_gateway_http_integration_with_path_request_parameter(self):
         client = aws_stack.connect_to_service("apigateway")
         test_port = get_free_tcp_port()
