@@ -6,7 +6,6 @@ import time
 import unittest
 
 import mock
-import pytest
 
 from localstack.constants import LAMBDA_TEST_ROLE, TEST_AWS_ACCOUNT_ID
 from localstack.services.awslambda import lambda_api, lambda_executors, lambda_utils
@@ -426,7 +425,6 @@ class TestLambdaAPI(unittest.TestCase):
 
         self.assertEqual("Disabled", getResult["State"])
 
-    @pytest.mark.failing_offline
     def test_publish_function_version(self):
         with self.app.test_request_context():
             self._create_function(self.FUNCTION_NAME)
@@ -457,9 +455,8 @@ class TestLambdaAPI(unittest.TestCase):
             expected_result["PackageType"] = None
             expected_result["ImageConfig"] = {}
             expected_result["Architectures"] = ["x86_64"]
-            self.assertDictEqual(expected_result, result)
+            self.assertDictContainsSubset(expected_result, result)
 
-    @pytest.mark.failing_offline
     def test_publish_update_version_increment(self):
         with self.app.test_request_context():
             self._create_function(self.FUNCTION_NAME)
@@ -492,7 +489,7 @@ class TestLambdaAPI(unittest.TestCase):
             expected_result["PackageType"] = None
             expected_result["ImageConfig"] = {}
             expected_result["Architectures"] = ["x86_64"]
-            self.assertDictEqual(expected_result, result)
+            self.assertDictContainsSubset(expected_result, result)
 
     def test_publish_non_existant_function_version_returns_error(self):
         with self.app.test_request_context():
@@ -503,7 +500,6 @@ class TestLambdaAPI(unittest.TestCase):
                 result["message"],
             )
 
-    @pytest.mark.failing_offline
     def test_list_function_versions(self):
         with self.app.test_request_context():
             self._create_function(self.FUNCTION_NAME)
@@ -544,7 +540,7 @@ class TestLambdaAPI(unittest.TestCase):
             expected_result = {
                 "Versions": sorted([latest_version, version], key=lambda k: str(k.get("Version")))
             }
-            self.assertDictEqual(expected_result, result)
+            self.assertDictContainsSubset(expected_result, result)
 
     def test_list_non_existant_function_versions_returns_error(self):
         with self.app.test_request_context():

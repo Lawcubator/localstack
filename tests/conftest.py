@@ -36,18 +36,6 @@ def pytest_collection_modifyitems(config, items):
         "the test."
     )
 
-    # TODO fix all tests marked with "skip_offline_failing" and remove this marker.
-    #     skip_offline_failing = pytest.mark.skip(
-    #         reason="This test currently does not work when executed offline (even "
-    #         "though it should). It represents a test which should be fixed."
-    #     )
-
     for item in items:
         if "skip_offline" in item.keywords:
             item.add_marker(skip_offline)
-
-        # TODO fix all tests marked with "skip_offline_failing" and remove this marker.
-
-
-#         if "failing_offline" in item.keywords:
-#             item.add_marker(skip_offline_failing)
